@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil Admin - EcoSwap</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+          <img src="images/ecoswap.png" alt="EcoSwap" height="30" class="me-2">EcoSwap
+          <span class="badge bg-warning text-dark">ADMIN</span>
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Página Inicial</a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="bi bi-person-circle me-1"></i>
+                <span id="userNameNav">Admin</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a class="dropdown-item" href="admin-profile.html"
+                    ><i class="bi bi-person-badge me-2"></i>Perfil Admin</a
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item logout-btn" href="#"
+                    ><i class="bi bi-box-arrow-right me-2"></i>Sair</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid flex-grow-1">
+      <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-2 sidebar">
+          <nav class="nav flex-column">
+            <a class="nav-link" href="admin-dashboard.html">
+              <i class="bi bi-speedometer2 me-2"></i>Dashboard
+            </a>
+            <a class="nav-link" href="admin-users.html">
+              <i class="bi bi-people me-2"></i>Usuários
+            </a>
+            <a class="nav-link active" href="admin-profile.html">
+              <i class="bi bi-person-badge me-2"></i>Perfil Admin
+            </a>
+          </nav>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="col-lg-10 p-4">
+          <!-- Page Header -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h2><i class="bi bi-person-badge me-2"></i>Perfil Administrativo</h2>
+              <p class="text-muted">
+                Gerencie suas informações administrativas e configurações da conta
+              </p>
+            </div>
+          </div>
+
+          <!-- Alert Messages -->
+          <div id="alertMessage" class="alert d-none" role="alert"></div>
+
+          <!-- Profile Form -->
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="card">
+                <div class="card-header bg-warning text-dark">
+                  <h5 class="card-title mb-0">
+                    <i class="bi bi-shield-check me-2"></i>Informações do Administrador
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <form id="adminProfileForm">
+                    <div class="row">
+                      <div class="col-md-12 mb-3">
+                        <label for="name" class="form-label"
+                          >Nome do Administrador *</label
+                        >
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="bi bi-person-badge"></i
+                          ></span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="name"
+                            name="name"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12 mb-3">
+                        <label for="email" class="form-label">Email Administrativo *</label>
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="bi bi-envelope-at"></i
+                          ></span>
+                          <input
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            required
+                            readonly
+                          />
+                        </div>
+                        <small class="text-muted"
+                          >Email administrativo não pode ser alterado por segurança</small
+                        >
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <label for="phone" class="form-label">Telefone *</label>
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="bi bi-telephone"></i
+                          ></span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="phone"
+                            name="phone"
+                            placeholder="(34) 99999-9999"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="location" class="form-label"
+                          >Localização *</label
+                        >
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="bi bi-geo-alt"></i
+                          ></span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="location"
+                            name="location"
+                            placeholder="Cidade, Estado"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="border-top pt-3 mt-3">
+                      <h6><i class="bi bi-shield-lock me-2"></i>Alterar Senha Administrativa</h6>
+                      <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Por segurança, utilize uma senha forte com pelo menos 8 caracteres.
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label for="newPassword" class="form-label"
+                            >Nova Senha</label
+                          >
+                          <div class="input-group">
+                            <span class="input-group-text"
+                              ><i class="bi bi-lock"></i
+                            ></span>
+                            <input
+                              type="password"
+                              class="form-control"
+                              id="newPassword"
+                              name="newPassword"
+                              minlength="6"
+                            />
+                          </div>
+                          <small class="text-muted"
+                            >Deixe em branco para não alterar</small
+                          >
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label for="confirmNewPassword" class="form-label"
+                            >Confirmar Nova Senha</label
+                          >
+                          <div class="input-group">
+                            <span class="input-group-text"
+                              ><i class="bi bi-lock-fill"></i
+                            ></span>
+                            <input
+                              type="password"
+                              class="form-control"
+                              id="confirmNewPassword"
+                              name="confirmNewPassword"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                      <button
+                        type="submit"
+                        class="btn btn-warning text-dark"
+                        id="saveProfileBtn"
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2 d-none"
+                          id="saveSpinner"
+                        ></span>
+                        <i class="bi bi-check me-2"></i>Salvar Alterações
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        id="cancelBtn"
+                      >
+                        <i class="bi bi-x me-2"></i>Cancelar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Admin Statistics -->
+            <div class="col-lg-4">
+              <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                  <h5 class="card-title mb-0">
+                    <i class="bi bi-graph-up me-2"></i>Estatísticas do Sistema
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="text-center mb-3">
+                    <i class="bi bi-shield-check display-1 text-warning"></i>
+                  </div>
+
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span
+                        ><i class="bi bi-calendar me-2 text-muted"></i>Admin
+                        desde</span
+                      >
+                      <span id="adminSince" class="fw-bold">-</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span
+                        ><i class="bi bi-people me-2 text-primary"></i>Total de
+                        usuários</span
+                      >
+                      <span id="totalUsers" class="fw-bold">0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span
+                        ><i class="bi bi-box me-2 text-success"></i
+                        >Total de itens</span
+                      >
+                      <span id="totalSystemItems" class="fw-bold">0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span
+                        ><i class="bi bi-activity me-2 text-info"></i
+                        >Sistema</span
+                      >
+                      <span class="fw-bold text-success">Ativo</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Admin Actions -->
+              <div class="card border-info mt-4">
+                <div class="card-header bg-info text-white">
+                  <h5 class="card-title mb-0">
+                    <i class="bi bi-lightning me-2"></i>Ações Administrativas
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <a href="admin-dashboard.html" class="btn btn-outline-primary">
+                      <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                    </a>
+                    <a href="admin-users.html" class="btn btn-outline-success">
+                      <i class="bi bi-people me-2"></i>Gerenciar Usuários
+                    </a>
+                    <button class="btn btn-outline-warning" onclick="generateSystemReport()">
+                      <i class="bi bi-file-text me-2"></i>Relatório do Sistema
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h5>EcoSwap</h5>
+            <p class="text-muted">Sistema de Trocas Sustentáveis</p>
+            <p class="text-muted mb-0">
+              &copy; 2025 EcoSwap. Desenvolvido para disciplina de
+              Desenvolvimento Web I - UFU
+            </p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <h5 class="text-primary">Desenvolvedores</h5>
+            <ul class="list-unstyled text-muted">
+              <li>Gabriel Freitas Santos</li>
+              <li>Gustavo de Araújo Santos</li>
+              <li>Gustavo Oliveira Tundisi</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+    <script src="js/admin-profile.js"></script>
+  </body>
+</html>

@@ -1,0 +1,350 @@
+/* EcoSwap - Sistema de Trocas Sustentáveis */
+
+:root {
+  --primary-color: #28a745;
+  --secondary-color: #20c997;
+  --accent-color: #fd7e14;
+  --dark-color: #343a40;
+  --light-color: #f8f9fa;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --info-color: #17a2b8;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  background-color: var(--light-color);
+}
+
+/* Header Customizado */
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--primary-color) !important;
+}
+
+.navbar-nav .nav-link {
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+/* Botões customizados */
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Cards de itens */
+.item-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.item-image {
+  height: 200px;
+  object-fit: cover;
+  background-color: #e9ecef;
+}
+
+/* Hero section */
+.hero-section {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  color: white;
+  padding: 4rem 0;
+}
+
+/* Dashboard welcome section */
+.container-fluid .row .col-12 .card.bg-gradient {
+  color: white;
+}
+
+.container-fluid .row .col-12 .card.bg-gradient .card-body h1,
+.container-fluid .row .col-12 .card.bg-gradient .card-body p {
+  color: var(--dark-color);
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+/* Features section */
+.feature-icon {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+/* Sidebar da área privada */
+.sidebar {
+  background-color: var(--dark-color);
+  min-height: calc(100vh - 76px);
+  padding: 1rem 0;
+}
+
+.sidebar .nav-link {
+  color: #adb5bd;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  margin: 0.25rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  color: white;
+  background-color: var(--primary-color);
+}
+
+/* Formulários */
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.is-invalid {
+  border-color: var(--danger-color);
+}
+
+.invalid-feedback {
+  color: var(--danger-color);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.is-valid {
+  border-color: var(--success-color);
+}
+
+.valid-feedback {
+  color: var(--success-color);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Tabelas */
+.table-actions {
+  width: 120px;
+}
+
+.table-actions .btn {
+  margin: 0 0.25rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Modal customizado */
+.modal-header {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.modal-header .btn-close {
+  filter: invert(1);
+}
+
+/* Footer */
+footer {
+  background-color: var(--dark-color);
+  color: #adb5bd;
+  padding: 2rem 0;
+  margin-top: auto;
+}
+
+footer h5 {
+  color: var(--secondary-color);
+}
+
+footer .text-muted {
+  color: #8a8e93 !important;
+}
+
+footer a {
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Utilitários */
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+a.text-primary:link,
+a.text-primary:visited,
+a.text-primary:hover,
+a.text-primary:active {
+  color: var(--primary-color) !important;
+  text-decoration: none;
+}
+
+a.text-primary:hover {
+  text-decoration: underline;
+}
+
+.text-primary-custom {
+  color: var(--primary-color) !important;
+}
+
+.bg-primary-custom {
+  background-color: var(--primary-color) !important;
+}
+
+.border-primary-custom {
+  border-color: var(--primary-color) !important;
+}
+
+/* Classe para aplicar a cor verde #28A745 em textos e links */
+.text-ecoswap-green {
+  color: #28A745 !important;
+}
+
+a.text-ecoswap-green:link,
+a.text-ecoswap-green:visited,
+a.text-ecoswap-green:hover,
+a.text-ecoswap-green:active {
+  color: #28A745 !important;
+  text-decoration: none;
+}
+
+a.text-ecoswap-green:hover {
+  text-decoration: underline;
+}
+
+/* Classe para botões com a cor verde #28A745 */
+.btn-ecoswap-green {
+  background-color: #28A745 !important;
+  border-color: #28A745 !important;
+  color: white !important;
+}
+
+.btn-ecoswap-green:hover {
+  background-color: #218838 !important;
+  border-color: #1e7e34 !important;
+  color: white !important;
+}
+
+/* Loading spinner */
+.spinner-border-custom {
+  color: var(--primary-color);
+}
+
+/* Badges de status */
+.badge-available {
+  background-color: var(--success-color);
+}
+
+.badge-traded {
+  background-color: var(--info-color);
+}
+
+.badge-removed {
+  background-color: var(--danger-color);
+}
+
+/* Responsividade adicional */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+
+  .hero-section p {
+    font-size: 1rem;
+  }
+
+  .sidebar {
+    min-height: auto;
+  }
+
+  .item-card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Animações */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Busca */
+.search-form {
+  max-width: 500px;
+}
+
+.search-results {
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.search-result-item:hover {
+  background-color: #f8f9fa;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}

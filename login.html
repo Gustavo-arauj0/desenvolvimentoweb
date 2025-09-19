@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' https://cdn.jsdelivr.net; connect-src 'self';" />
+    <title>Login - EcoSwap</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="images/ecoswap.png" alt="EcoSwap" height="30" class="me-2">EcoSwap
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Início</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#catalog">Catálogo</a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" href="login.html">Entrar</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary ms-2" href="cadastro.html"
+                >Cadastre-se</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1 d-flex align-items-center">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+              <div class="card-body p-4">
+                <div class="text-center mb-4">
+                  <img src="images/ecoswap.png" alt="EcoSwap" height="60" class="mb-3">
+                  <h3>Entrar no Sistema</h3>
+                  <p class="text-muted">Faça login para acessar sua conta</p>
+                </div>
+
+                <!-- Mensagem de alerta -->
+                <div id="alertMessage" class="alert d-none" role="alert"></div>
+
+                <!-- Formulário de Login -->
+                <form id="loginForm">
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <div class="input-group">
+                      <span class="input-group-text"
+                        ><i class="bi bi-envelope"></i
+                      ></span>
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Senha</label>
+                    <div class="input-group">
+                      <span class="input-group-text"
+                        ><i class="bi bi-lock"></i
+                      ></span>
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        required
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        id="togglePassword"
+                      >
+                        <i class="bi bi-eye"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="rememberMe"
+                    />
+                    <label class="form-check-label" for="rememberMe">
+                      Lembrar de mim
+                    </label>
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="btn btn-primary w-100 mb-3"
+                    id="loginBtn"
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm me-2 d-none"
+                      id="loginSpinner"
+                    ></span>
+                    Entrar
+                  </button>
+                </form>
+
+
+
+                <div class="text-center mt-4">
+                  <p class="mb-0">Não tem uma conta?</p>
+                  <a href="cadastro.html" class="text-primary"
+                    >Cadastre-se aqui</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center mb-2">
+              <img src="images/ecoswap.png" alt="EcoSwap" height="24" class="me-2">
+              <h5 class="mb-0 text-primary">EcoSwap</h5>
+            </div>
+            <p class="text-muted">Sistema de Trocas Sustentáveis</p>
+            <p class="text-muted mb-0">
+              &copy; 2025 EcoSwap. Desenvolvido para disciplina de
+              Desenvolvimento Web I - UFU
+            </p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <h5 class="text-primary">Desenvolvedores</h5>
+            <ul class="list-unstyled text-muted">
+              <li>Gabriel Freitas Santos</li>
+              <li>Gustavo de Araújo Santos</li>
+              <li>Gustavo Oliveira Tundisi</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/validator.js"></script>
+    <script src="js/auth.js"></script>
+  </body>
+</html>

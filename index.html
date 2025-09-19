@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' https://cdn.jsdelivr.net; connect-src 'self';" />
+    <title>EcoSwap - Sistema de Trocas Sustentáveis</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="images/ecoswap.png" alt="EcoSwap" height="30" class="me-2">EcoSwap
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="index.html">Início</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#catalog">Catálogo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">Sobre</a>
+            </li>
+          </ul>
+
+          <!-- Barra de busca -->
+          <div class="search-form me-3 position-relative">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                id="searchInput"
+                placeholder="Buscar itens..."
+              />
+              <button class="btn btn-outline-primary" type="button">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+            <div
+              id="searchResults"
+              class="position-absolute w-100"
+              style="z-index: 1000; display: none"
+            ></div>
+          </div>
+
+          <!-- Menu para usuários não logados -->
+          <ul class="navbar-nav" id="guestNavbar">
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Entrar</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary ms-2" href="cadastro.html"
+                >Cadastre-se</a
+              >
+            </li>
+          </ul>
+
+          <!-- Menu para usuários logados -->
+          <ul class="navbar-nav" id="loggedNavbar" style="display: none">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle d-flex align-items-center"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="bi bi-person-circle fs-5 me-2"></i>
+                <span id="userNameNav">Usuário</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <h6 class="dropdown-header" id="userTypeHeader">Usuário</h6>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="profile.html"
+                    ><i class="bi bi-person me-2"></i>Meu Perfil</a
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#" id="logoutLink"
+                    ><i class="bi bi-box-arrow-right me-2"></i>Sair da Conta</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+      <!-- Hero Section para Visitantes -->
+      <section class="hero-section text-center" id="guestHero">
+        <div class="container">
+          <h1>Troque, Reutilize, Sustente</h1>
+          <p class="lead">
+            Conecte-se com pessoas da sua região e dê uma nova vida aos objetos
+            que você não usa mais
+          </p>
+          <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="cadastro.html" class="btn btn-light btn-lg"
+              >Começar a Trocar</a
+            >
+            <a href="#catalog" class="btn btn-outline-light btn-lg"
+              >Ver Catálogo</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Hero Section para Usuários Comuns -->
+      <section
+        class="hero-section text-center"
+        id="userHero"
+        style="display: none"
+      >
+        <div class="container">
+          <h1>Bem-vindo de volta, <span id="userNameHero">Usuário</span>!</h1>
+          <p class="lead">
+            Continue trocando seus itens e contribuindo para um mundo mais
+            sustentável
+          </p>
+          <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <button
+              class="btn btn-light btn-lg"
+              data-bs-toggle="modal"
+              data-bs-target="#addItemModal"
+            >
+              <i class="bi bi-plus-circle me-2"></i>Adicionar Item
+            </button>
+            <a href="dashboard.html" class="btn btn-outline-light btn-lg" id="userDashboardLink">
+              <i class="bi bi-house me-2"></i>Meu Dashboard
+            </a>
+            <a href="#catalog" class="btn btn-outline-light btn-lg">
+              <i class="bi bi-grid me-2"></i>Ver Catálogo
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Hero Section para Administradores -->
+      <section
+        class="hero-section text-center"
+        id="adminHero"
+        style="display: none"
+      >
+        <div class="container">
+          <h1>Painel Administrativo</h1>
+          <p class="lead">
+            Gerencie o sistema EcoSwap e acompanhe as atividades da plataforma
+          </p>
+          <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="admin-dashboard.html" class="btn btn-light btn-lg" id="adminDashboardLink">
+              <i class="bi bi-speedometer2 me-2"></i>Dashboard Admin
+            </a>
+            <a href="admin-users.html" class="btn btn-outline-light btn-lg">
+              <i class="bi bi-people me-2"></i>Gerenciar Usuários
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Estatísticas -->
+      <section class="py-5 bg-light">
+        <div class="container">
+          <div class="row text-center">
+            <div class="col-md-4">
+              <div class="feature-icon">
+                <i class="bi bi-people"></i>
+              </div>
+              <h4>Comunidade Ativa</h4>
+              <p class="text-muted">
+                Milhares de pessoas trocando itens diariamente
+              </p>
+            </div>
+            <div class="col-md-4">
+              <div class="feature-icon">
+                <i class="bi bi-arrow-clockwise"></i>
+              </div>
+              <h4>Economia Circular</h4>
+              <p class="text-muted">Promovendo o reuso e a sustentabilidade</p>
+            </div>
+            <div class="col-md-4">
+              <div class="feature-icon">
+                <i class="bi bi-shield-check"></i>
+              </div>
+              <h4>Trocas Seguras</h4>
+              <p class="text-muted">Sistema confiável para suas transações</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Catálogo Público -->
+      <section id="catalog" class="py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h2 class="text-center mb-5" id="catalogTitle"></h2>
+
+              <!-- Filtros -->
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <select class="form-select" id="categoryFilter">
+                    <option value="">Todas as categorias</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <select class="form-select" id="conditionFilter">
+                    <option value="">Todas as condições</option>
+                    <option value="Excelente">Excelente</option>
+                    <option value="Muito Bom">Muito Bom</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Regular">Regular</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Grid de itens -->
+              <div class="row" id="itemsGrid"></div>
+              <div id="loadingItems" class="text-center py-5" style="display: none"></div>
+              <div id="noItemsMessage" class="text-center py-5" style="display: none"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sobre o Sistema -->
+      <section id="about" class="py-5 bg-light">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+              <h2>
+                <i class="bi bi-arrow-repeat text-primary me-2"></i>Sobre o
+                EcoSwap
+              </h2>
+              <p class="lead">
+                O EcoSwap é uma plataforma web que facilita a troca de itens
+                entre usuários, promovendo o consumo consciente e a economia
+                circular.
+              </p>
+
+              <div class="row mt-5">
+                <div class="col-md-6">
+                  <h4>
+                    <i class="bi bi-tree text-success me-2"></i>Sustentabilidade
+                  </h4>
+                  <p>
+                    Contribua para um mundo mais sustentável reutilizando
+                    objetos e reduzindo o desperdício.
+                  </p>
+                </div>
+                <div class="col-md-6">
+                  <h4>
+                    <i class="bi bi-people text-primary me-2"></i>Comunidade
+                  </h4>
+                  <p>
+                    Conecte-se com pessoas da sua região e construa
+                    relacionamentos através das trocas.
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <h5>
+                  <i class="bi bi-globe text-info me-2"></i>Objetivos de
+                  Desenvolvimento Sustentável - ODS 12
+                </h5>
+                <p class="text-muted">
+                  <i class="bi bi-recycle text-success me-2"></i>
+                  Consumo e Produção Responsáveis: Assegurar padrões de produção
+                  e de consumo sustentáveis
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center mb-2">
+              <img src="images/ecoswap.png" alt="EcoSwap" height="24" class="me-2">
+              <h5 class="mb-0 text-primary">EcoSwap</h5>
+            </div>
+            <p class="text-muted">Sistema de Trocas Sustentáveis</p>
+            <p class="text-muted mb-0">
+              &copy; 2025 EcoSwap. Desenvolvido para disciplina de
+              Desenvolvimento Web I - UFU
+            </p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <h5 class="text-primary">Desenvolvedores</h5>
+            <ul class="list-unstyled text-muted">
+              <li>Gabriel Freitas Santos</li>
+              <li>Gustavo de Araújo Santos</li>
+              <li>Gustavo Oliveira Tundisi</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Add/Edit Item Modal -->
+    <div class="modal fade" id="addItemModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addItemModalTitle">Adicionar Item</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="itemForm">
+              <input type="hidden" id="itemId" name="itemId" />
+
+              <div class="row">
+                <div class="col-md-8 mb-3">
+                  <label for="title" class="form-label">Título do Item *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    required
+                  />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="category" class="form-label">Categoria *</label>
+                  <select
+                    class="form-select"
+                    id="category"
+                    name="category"
+                    required
+                  >
+                    <option value="">Selecione...</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="description" class="form-label">Descrição *</label>
+                <textarea
+                  class="form-control"
+                  id="description"
+                  name="description"
+                  rows="3"
+                  required
+                ></textarea>
+                <small class="text-muted"
+                  >Descreva o estado do item, características importantes,
+                  etc.</small
+                >
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="condition" class="form-label">Condição *</label>
+                  <select
+                    class="form-select"
+                    id="condition"
+                    name="condition"
+                    required
+                  >
+                    <option value="">Selecione...</option>
+                    <option value="Excelente">Excelente</option>
+                    <option value="Muito Bom">Muito Bom</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Regular">Regular</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="imageUrl" class="form-label"
+                    >URL da Imagem *</label
+                  >
+                  <input
+                    type="url"
+                    class="form-control"
+                    id="imageUrl"
+                    name="imageUrl"
+                    placeholder="https://exemplo.com/imagem.jpg"
+                    required
+                  />
+                  <small class="text-muted"
+                    >Cole o link de uma imagem do seu item</small
+                  >
+                </div>
+              </div>
+
+              <!-- Preview da imagem -->
+              <div class="mb-3" id="imagePreview" style="display: none">
+                <label class="form-label">Preview da Imagem</label>
+                <div class="border rounded p-2">
+                  <img
+                    id="previewImg"
+                    src=""
+                    alt="Preview"
+                    class="img-fluid"
+                    style="max-height: 200px"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" id="saveItemBtn">
+              <span
+                class="spinner-border spinner-border-sm me-2 d-none"
+                id="saveSpinner"
+              ></span>
+              <span id="saveItemText">Salvar Item</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de detalhes do item -->
+    <div class="modal fade" id="itemDetailsModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="itemModalTitle">Detalhes do Item</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body" id="itemModalBody">
+            <!-- Conteúdo será carregado dinamicamente -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Fechar
+            </button>
+            <a href="login.html" class="btn btn-primary"
+              >Entrar para Propor Troca</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+    <script src="js/public.js"></script>
+    <script>
+      // Add Item Modal functionality for homepage
+      $(document).ready(function() {
+        // Setup add item modal functionality
+        setupAddItemModal();
+      });
+
+      function setupAddItemModal() {
+        // Populate categories when modal opens
+        $('#addItemModal').on('show.bs.modal', function() {
+          if (window.ecoSwap && window.ecoSwap.categories) {
+            populateModalCategories();
+          }
+          
+          // Reset form
+          $('#itemForm')[0].reset();
+          $('#itemId').val('');
+          $('#imagePreview').hide();
+          
+          // Clear any previous validation
+          if (window.FormValidator) {
+            FormValidator.clearValidation('#itemForm');
+          }
+        });
+
+        // Image preview functionality
+        $('#imageUrl').on('input', function() {
+          const url = $(this).val().trim();
+          if (url && isValidUrl(url)) {
+            $('#previewImg').attr('src', url);
+            $('#imagePreview').show();
+          } else {
+            $('#imagePreview').hide();
+          }
+        });
+
+        // Save item functionality
+        $('#saveItemBtn').on('click', function() {
+          if (window.ecoSwap && window.ecoSwap.currentUser) {
+            handleSaveItemHomepage();
+          } else {
+            alert('Você precisa estar logado para adicionar um item.');
+            window.location.href = 'login.html';
+          }
+        });
+      }
+
+      function populateModalCategories() {
+        const categories = window.ecoSwap.categories;
+        const $categorySelect = $('#category');
+        $categorySelect.empty().append('<option value="">Selecione...</option>');
+        
+        categories.forEach(category => {
+          $categorySelect.append(`<option value="${category}">${category}</option>`);
+        });
+      }
+
+      function handleSaveItemHomepage() {
+        const formData = {
+          title: $('#title').val().trim(),
+          description: $('#description').val().trim(),
+          category: $('#category').val(),
+          condition: $('#condition').val(),
+          imageUrl: $('#imageUrl').val().trim()
+        };
+
+        // Basic validation
+        if (!formData.title || !formData.description || !formData.category || !formData.condition || !formData.imageUrl) {
+          alert('Por favor, preencha todos os campos obrigatórios.');
+          return;
+        }
+
+        if (!isValidUrl(formData.imageUrl)) {
+          alert('Por favor, insira uma URL válida para a imagem.');
+          return;
+        }
+
+        // Show loading
+        const $saveBtn = $('#saveItemBtn');
+        const $spinner = $('#saveSpinner');
+        $saveBtn.prop('disabled', true);
+        $spinner.removeClass('d-none');
+
+        // Prepare item data
+        const itemData = {
+          title: formData.title,
+          description: formData.description,
+          category: formData.category,
+          condition: formData.condition,
+          images: [formData.imageUrl]
+        };
+
+        const result = window.ecoSwap.addItem(itemData);
+
+        if (result.success) {
+          alert('Item adicionado com sucesso!');
+          $('#addItemModal').modal('hide');
+          $('#itemForm')[0].reset();
+          $('#imagePreview').hide();
+          
+          // Refresh catalog if visible
+          if (window.loadCatalog && typeof window.loadCatalog === 'function') {
+            window.loadCatalog();
+          }
+        } else {
+          alert(result.message || 'Erro ao salvar item.');
+        }
+
+        // Remove loading
+        $saveBtn.prop('disabled', false);
+        $spinner.addClass('d-none');
+      }
+
+      function isValidUrl(string) {
+        try {
+          new URL(string);
+          return true;
+        } catch (_) {
+          return false;
+        }
+      }
+    </script>
+  </body>
+</html>
