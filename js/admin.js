@@ -160,6 +160,170 @@ function formatRelativeTime(date) {
     return `${diffInDays} dia(s) atrás`;
 }
 
-// Funções de Ações Rápidas (deixadas como exemplo, podem precisar de mais lógica)
-function generateReport() { alert('Função Gerar Relatório chamada.'); }
-function exportData() { alert('Função Exportar Dados chamada.'); }
+// Funções de Ações Rápidas
+function generateReport() {
+    if (!confirm('Deseja gerar o relatório completo do sistema? Isso pode levar alguns segundos.')) {
+        return;
+    }
+    
+    // Mostrar loading
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-spinner spinner-border spinner-border-sm me-2"></i>Gerando...';
+    
+    fetch('backend/api.php?action=generateReport')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Converter dados para CSV/Excel
+                generateExcelReport(data.data);
+                
+                // Mostrar mensagem de sucesso
+                setTimeout(() => {
+                    alert('Relatório gerado com sucesso! O download deve iniciar automaticamente.');
+                }, 500);
+            } else {
+                alert('Erro ao gerar relatório: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao gerar relatório:', error);
+            alert('Erro de conexão ao gerar relatório');
+        })
+        .finally(() => {
+            // Restaurar botão
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        });
+}
+
+function exportData() {
+    if (!confirm('Deseja exportar todos os dados do sistema em formato JSON?')) {
+        return;
+    }
+    
+    // Mostrar loading
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-spinner spinner-border spinner-border-sm me-2"></i>Exportando...';
+    
+    fetch('backend/api.php?action=exportData')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Fazer download do JSON
+                downloadJSON(data.data, data.filename);
+                
+                // Mostrar mensagem de sucesso
+                setTimeout(() => {
+                    alert('Dados exportados com sucesso! O arquivo JSON foi baixado.');
+                }, 500);
+            } else {
+                alert('Erro ao exportar dados: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao exportar dados:', error);
+            alert('Erro de conexão ao exportar dados');
+        })
+        .finally(() => {
+            // Restaurar botão
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        });
+}
+
+function generateExcelReport(data) {
+    // Criar conteúdo CSV
+    let csv = [];
+    
+    // Cabeçalho do relatório
+    csv.push(['RELATÓRIO ECOSWAP - GERADO EM: ' + new Date(data.generated_at).toLocaleString('pt-BR')]);
+    csv.push([]);
+    
+    // Estatísticas gerais
+    csv.push(['=== ESTATÍSTICAS GERAIS ===']);
+    csv.push(['Total de Usuários:', data.statistics.total_usuarios]);
+    csv.push(['Total de Itens:', data.statistics.total_itens]);
+    csv.push(['Itens Disponíveis:', data.statistics.total_disponiveis]);
+    csv.push(['Itens Trocados:', data.statistics.total_trocados]);
+    csv.push([]);
+    
+    // Dados dos usuários
+    csv.push(['=== USUÁRIOS ===']);
+    csv.push(['Nome', 'Email', 'Telefone', 'Localização', 'Data Cadastro', 'Total Itens', 'Disponíveis', 'Trocados', 'Removidos']);
+    
+    data.users.forEach(user => {
+        csv.push([
+            user.usuario_nome,
+            user.usuario_email,
+            user.usuario_telefone || 'N/A',
+            user.usuario_localizacao || 'N/A',
+            new Date(user.usuario_data_cadastro).toLocaleDateString('pt-BR'),
+            user.total_itens,
+            user.itens_disponiveis,
+            user.itens_trocados,
+            user.itens_removidos
+        ]);
+    });
+    
+    csv.push([]);
+    
+    // Dados dos itens
+    csv.push(['=== ITENS ===']);
+    csv.push(['Título', 'Descrição', 'Categoria', 'Condição', 'Status', 'Data Cadastro', 'Usuário', 'Email Usuário']);
+    
+    data.items.forEach(item => {
+        csv.push([
+            item.titulo,
+            item.descricao,
+            item.categoria,
+            item.condicao,
+            item.status,
+            new Date(item.data_cadastro).toLocaleDateString('pt-BR'),
+            item.usuario_nome,
+            item.usuario_email
+        ]);
+    });
+    
+    // Converter para string CSV
+    const csvContent = csv.map(row => {
+        return row.map(cell => {
+            // Escapar células que contenham vírgulas, aspas ou quebras de linha
+            if (typeof cell === 'string' && (cell.includes(',') || cell.includes('"') || cell.includes('\n'))) {
+                return '"' + cell.replace(/"/g, '""') + '"';
+            }
+            return cell;
+        }).join(',');
+    }).join('\n');
+    
+    // Fazer download
+    const filename = `relatorio_ecoswap_${new Date().toISOString().slice(0,10)}.csv`;
+    downloadFile(csvContent, filename, 'text/csv;charset=utf-8;');
+}
+
+function downloadJSON(data, filename) {
+    const jsonString = JSON.stringify(data, null, 2);
+    downloadFile(jsonString, filename, 'application/json;charset=utf-8;');
+}
+
+function downloadFile(content, filename, mimeType) {
+    // Adicionar BOM para UTF-8 (especialmente importante para CSV com acentos)
+    const BOM = '\uFEFF';
+    const blob = new Blob([BOM + content], { type: mimeType });
+    
+    // Criar link temporário para download
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    
+    // Adicionar ao DOM temporariamente e clicar
+    document.body.appendChild(link);
+    link.click();
+    
+    // Limpar
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+}
