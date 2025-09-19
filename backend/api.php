@@ -21,6 +21,7 @@ require_once 'controllers/AuthController.php';
 require_once 'controllers/UserController.php';
 require_once 'controllers/ItemController.php';
 require_once 'controllers/AdminController.php';
+require_once 'includes/session.php';
 
 $action = $_GET['action'] ?? '';
 
@@ -38,6 +39,12 @@ try {
             break;
         case 'updateAdminProfile':
             handleUpdateAdminProfile();
+            break;
+        case 'generateReport':
+            handleGenerateReport();
+            break;
+        case 'exportData':
+            handleExportData();
             break;
 
         // --- ROTAS DE USUÁRIO ---
@@ -656,6 +663,171 @@ function handleDeleteAccount() {
         }
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => 'Erro interno: ' . $e->getMessage()]);
+    }
+}
+
+function handleGenerateReport() {
+    // Verificar se é admin
+    if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Acesso negado']);
+        return;
+    }
+
+    try {
+        $db = Database::getInstance()->getConnection();
+        
+        // Buscar dados para o relatório
+        $query = "
+            SELECT 
+                u.nome as usuario_nome,
+                u.email as usuario_email,
+                u.telefone as usuario_telefone,
+                u.localizacao as usuario_localizacao,
+                u.data_cadastro as usuario_data_cadastro,
+                COUNT(i.id) as total_itens,
+                COUNT(CASE WHEN i.status = 'disponivel' THEN 1 END) as itens_disponiveis,
+                COUNT(CASE WHEN i.status = 'trocado' THEN 1 END) as itens_trocados,
+                COUNT(CASE WHEN i.status = 'removido' THEN 1 END) as itens_removidos
+            FROM usuarios u
+            LEFT JOIN itens i ON u.id = i.usuario_id
+            WHERE u.tipo_usuario = 'user'
+            GROUP BY u.id, u.nome, u.email, u.telefone, u.localizacao, u.data_cadastro
+            ORDER BY u.data_cadastro DESC
+        ";
+        
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Buscar estatísticas gerais
+        $statsQuery = "
+            SELECT 
+                COUNT(DISTINCT u.id) as total_usuarios,
+                COUNT(i.id) as total_itens,
+                COUNT(CASE WHEN i.status = 'disponivel' THEN 1 END) as total_disponiveis,
+                COUNT(CASE WHEN i.status = 'trocado' THEN 1 END) as total_trocados
+            FROM usuarios u
+            LEFT JOIN itens i ON u.id = i.usuario_id
+            WHERE u.tipo_usuario = 'user'
+        ";
+        
+        $statsStmt = $db->prepare($statsQuery);
+        $statsStmt->execute();
+        $stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Buscar itens detalhados
+        $itemsQuery = "
+            SELECT 
+                i.titulo,
+                i.descricao,
+                c.nome as categoria,
+                i.condicao,
+                i.status,
+                i.data_cadastro,
+                u.nome as usuario_nome,
+                u.email as usuario_email
+            FROM itens i
+            JOIN usuarios u ON i.usuario_id = u.id
+            JOIN categorias c ON i.categoria_id = c.id
+            ORDER BY i.data_cadastro DESC
+        ";
+        
+        $itemsStmt = $db->prepare($itemsQuery);
+        $itemsStmt->execute();
+        $items = $itemsStmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        echo json_encode([
+            'success' => true,
+            'data' => [
+                'users' => $users,
+                'items' => $items,
+                'statistics' => $stats,
+                'generated_at' => date('Y-m-d H:i:s'),
+                'report_type' => 'admin_report'
+            ]
+        ]);
+        
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'Erro ao gerar relatório: ' . $e->getMessage()]);
+    }
+}
+
+function handleExportData() {
+    // Verificar se é admin
+    if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Acesso negado']);
+        return;
+    }
+
+    try {
+        $db = Database::getInstance()->getConnection();
+        
+        // Buscar todos os dados do sistema
+        $data = [];
+        
+        // Usuários (excluir senhas)
+        $usersQuery = "SELECT id, nome, email, telefone, localizacao, tipo_usuario, data_cadastro FROM usuarios ORDER BY data_cadastro DESC";
+        $stmt = $db->prepare($usersQuery);
+        $stmt->execute();
+        $data['usuarios'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Categorias
+        $categoriesQuery = "SELECT * FROM categorias ORDER BY nome";
+        $stmt = $db->prepare($categoriesQuery);
+        $stmt->execute();
+        $data['categorias'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Itens com informações de usuário e categoria
+        $itemsQuery = "
+            SELECT 
+                i.id,
+                i.titulo,
+                i.descricao,
+                i.condicao,
+                i.status,
+                i.imagem_url,
+                i.data_cadastro,
+                u.nome as usuario_nome,
+                u.email as usuario_email,
+                c.nome as categoria_nome
+            FROM itens i
+            JOIN usuarios u ON i.usuario_id = u.id
+            JOIN categorias c ON i.categoria_id = c.id
+            ORDER BY i.data_cadastro DESC
+        ";
+        $stmt = $db->prepare($itemsQuery);
+        $stmt->execute();
+        $data['itens'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Trocas (se existir tabela)
+        try {
+            $tradesQuery = "SELECT * FROM trocas ORDER BY data_troca DESC";
+            $stmt = $db->prepare($tradesQuery);
+            $stmt->execute();
+            $data['trocas'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            // Tabela de trocas não existe ainda
+            $data['trocas'] = [];
+        }
+        
+        // Metadados da exportação
+        $data['metadata'] = [
+            'exported_at' => date('Y-m-d H:i:s'),
+            'exported_by' => $_SESSION['user_email'] ?? 'admin',
+            'version' => '1.0',
+            'system' => 'EcoSwap'
+        ];
+        
+        echo json_encode([
+            'success' => true,
+            'data' => $data,
+            'filename' => 'ecoswap_export_' . date('Y-m-d_H-i-s') . '.json'
+        ]);
+        
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'Erro ao exportar dados: ' . $e->getMessage()]);
     }
 }
 
